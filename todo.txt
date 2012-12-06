@@ -1,0 +1,2 @@
+Overload WhatPules class so
+wp->UserID will work (turn data into array then __get($name) function
