@@ -24,18 +24,18 @@ class WhatPulse {
         $hours = $minutes/60;
         $days = $hours/24;
 //keypress calculation
-        $totalkeys = $this->xml->TotalKeyCount;
+        $totalkeys = $this->xml->TotalKeyCount+0.0;
         $kperminute = $totalkeys/$minutes;
         $kperhour = $totalkeys/$hours;
         $kperday = $totalkeys/$days;
 //click calculation
-        $totalclicks = $this->xml->TotalMouseClicks;
+        $totalclicks = $this->xml->TotalMouseClicks+0.0;
         $cperminute = $totalclicks/$minutes;
         $cperhour = $totalclicks/$hours;
         $cperday = $totalclicks/$days;
 //formatting
-        $this->totalclicks = number_format($totalclicks,2);
-        $this->totalkeys = number_format($totalkeys,2);
+        $this->totalclicks = number_format($totalclicks,0);
+        $this->totalkeys = number_format($totalkeys,0);
         $this->kperminute = number_format($kperminute,2);
         $this->cperminute = number_format($cperminute,2);
         $this->kperhour = number_format($kperhour,2);
