@@ -4,6 +4,8 @@ class WhatPulse {
     private $xml;//xml obtained from whatpulse
     private $totalclicks;
     private $totalkeys;
+private $kperminute;
+private $cperminute;
     private $kperhour;
     private $cperhour;
     private $kperday;
@@ -18,19 +20,24 @@ class WhatPulse {
     function get() {
 //time calculation
         $totaltime = time()-strtotime($this->xml->DateJoined);
-        $hours = $totaltime/3600;
+	$minutes = $totaltime/60;
+        $hours = $minutes/60;
         $days = $hours/24;
 //keypress calculation
         $totalkeys = $this->xml->TotalKeyCount;
+$kperminute = $totalkeys/$minutes;
         $kperhour = $totalkeys/$hours;
         $kperday = $totalkeys/$days;
 //click calculation
         $totalclicks = $this->xml->TotalMouseClicks;
+$cperminute = $totalclicks/$minutes;
         $cperhour = $totalclicks/$hours;
         $cperday = $totalclicks/$days;
 //formatting
         $this->totalclicks = number_format($totalclicks,2);
         $this->totalkeys = number_format($totalkeys,2);
+	$this->kperminute = number_format($kperminute,2);
+$this->cperminute = number_format($cperminute,2);
         $this->kperhour = number_format($kperhour,2);
         $this->cperhour = number_format($cperhour,2);
         $this->kperday = number_format($kperday,2);
@@ -54,9 +61,9 @@ class WhatPulse {
         echo 'Account Name: '.$this->xml->AccountName.' (id ' .$this->xml->UserID.' ranked '.$this->xml->Rank.")\n";
         echo $this->xml->Pulses.' pulses (last pulsed '.$this->xml->LastPulse.")\n";
         echo 'Key presses: '.$this->totalkeys."\n";
-        echo "\t".$this->kperhour.'/hour'."\n\t".$this->kperday.'/day'."\n";
+        echo "\t".$this->kperminute.'/minute'."\n\t".$this->kperhour.'/hour'."\n\t".$this->kperday.'/day'."\n";
         echo 'Mouse click: '.$this->totalclicks."\n";
-        echo "\t".$this->cperhour.'/hour'."\n\t".$this->cperday.'/day'."\n";
+        echo "\t".$this->cperminute.'/minute'."\n\t".$this->cperhour.'/hour'."\n\t".$this->cperday.'/day'."\n";
         echo 'Total miles: '.$this->xml->TotalMiles."\n";
         echo 'Date joined: '.$this->xml->DateJoined.' ('.$this->days.' days)'."\n";
     }
