@@ -2,17 +2,7 @@
 
 function create_image() 
 { 
-    //Let's generate a totally random string using md5 
-    $md5 = md5(rand(0,999)); 
-    //We don't need a 32 character long string so we trim it down to 5 
-    $pass = substr($md5, 10, 5); 
-
-    //Set the image width and height 
-    $width = 100; 
-    $height = 20;  
-
-    //Create the image resource 
-    $image = imagecreate($width, $height);  
+	$image = imagecreatefrompng('bg/tree.png');  
 
     //We are making three colors, white, black and gray 
     $white = ImageColorAllocate($image, 255, 255, 255); 
