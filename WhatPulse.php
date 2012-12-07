@@ -13,10 +13,14 @@ class WhatPulse {
     private $hours;
     private $days;
 
-private $_retrievable = array('id','totalclicks','totalkeys','kperminute','cperminute','kperhour','cperhour','kperday','cperday','hours','days');
+private $_retrievable = array('id','totalclicks','totalkeys','kperminute','cperminute','kperhour','cperhour','kperday','cperday','hours','days');///<variables retrievable using magic functions
+private $built;///<whether or not the class has been built
+
+
     function __construct($id) {
         $this->id = $id;
         $this->getXML();
+
     }
 function __get($name)
 {
