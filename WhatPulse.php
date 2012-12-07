@@ -13,8 +13,8 @@ class WhatPulse {
     private $hours;
     private $days;
 
-private $_retrievable = array('id','totalclicks','totalkeys','kperminute','cperminute','kperhour','cperhour','kperday','cperday','hours','days');///<variables retrievable using magic functions
-private $built;///<whether or not the class has been built
+    private $_retrievable = array('id','totalclicks','totalkeys','kperminute','cperminute','kperhour','cperhour','kperday','cperday','hours','days');///<variables retrievable using magic functions
+    private $built;///<whether or not the class has been built
 
 
     function __construct($id) {
@@ -22,12 +22,11 @@ private $built;///<whether or not the class has been built
         $this->getXML();
 
     }
-function __get($name)
-{
-if(!in_array($name,$this->_retrievable))
-throw new Exception('Variable '.$name.' does not exist in class WhatPulse.');
-return $this->$name;
-}
+    function __get($name) {
+        if(!in_array($name,$this->_retrievable))
+            throw new Exception('Variable '.$name.' does not exist in class WhatPulse.');
+        return $this->$name;
+    }
     function get() {
 //time calculation
         $totaltime = time()-strtotime($this->xml->DateJoined);
