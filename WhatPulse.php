@@ -13,10 +13,17 @@ class WhatPulse {
     private $hours;
     private $days;
 
+private $_retrievable = array('id','totalclicks','totalkeys','kperminute','cperminute','kperhour','cperhour','kperday','cperday','hours','days');
     function __construct($id) {
         $this->id = $id;
         $this->getXML();
     }
+function __get($name)
+{
+if(!in_array($name,$this->_retrievable))
+throw new Exception('Variable '.$name.' does not exist in class WhatPulse.');
+return $this->$name;
+}
     function get() {
 //time calculation
         $totaltime = time()-strtotime($this->xml->DateJoined);
@@ -50,8 +57,7 @@ class WhatPulse {
 
         $f = fopen($url.$this->id,'r');
         if($f === false) {
-            echo 'Could not open '.$url.$this->id.'. Please check your internet connection';
-            return;
+            throw new Exception('Could not open '.$url.$this->id.'. Please check your internet connection');
         }
         $content = stream_get_contents($f);
         $this->xml = new SimpleXMLElement($content);
