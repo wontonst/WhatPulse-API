@@ -4,6 +4,9 @@ define('BG','bg/');
 define('FONT','fonts/');
 
 function create_image() {
+
+$font = FONT.'adventure_subtitles.ttf';
+
     $image = imagecreatefrompng(BG.'tree.png');
 
     //We are making three colors, white, black and gray
@@ -12,14 +15,12 @@ function create_image() {
     $grey = ImageColorAllocate($image, 204, 204, 204);
 
 //adding username
-    imagettftext($image, 20, 0.0, 0,0,$white,FONT.'adventure_subtitles.ttf','wontonst' );
+    imagettftext($image, 40, 0.0, 30,280,$white,$font,'wontonst' );
+imagettftext($image,30,0.0,400,277,$white,$font,'ranked 13420');
 
+    ImageJpeg($image,'out.jpg'); //output
 
-    //Output the newly created image in jpeg format
-    ImageJpeg($image,'out.jpg');
-
-    //Free up resources
-    ImageDestroy($image);
+    ImageDestroy($image);    //free up resources
 
 }
 
