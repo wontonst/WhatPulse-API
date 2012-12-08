@@ -1,33 +1,50 @@
 <?
+/**
+An alternative to whatever the WhatPulse website script offers. To be honest this was written before I discovered that WhatPulse has their own script ready to be deployed. Nonetheless, this code does appear to work and should suffice for most purposes.
+@brief retrieves data from the whatpulse web API
+@author Roy YiWei Zheng
+@version 0.1
+*/
 class WhatPulse {
     private $id;//whatpulse id
     private $xml;//xml obtained from whatpulse
-    private $totalclicks;
-    private $totalkeys;
-    private $kperminute;
-    private $cperminute;
-    private $kperhour;
-    private $cperhour;
-    private $kperday;
-    private $cperday;
-    private $hours;
-    private $days;
+    private $totalclicks;///<total keyboard actions
+    private $totalkeys;///<total mouse clicks
+    private $kperminute;///<keyboard actions per minute(string formatted)
+    private $cperminute;///<mouse clicks per minute(string formatted)
+    private $kperhour;///<keyboard actions per hour(string formatted)
+    private $cperhour;///<mouse clicks per hour(string formatted)
+    private $kperday;///<keyboard actions per day(string formatted)
+    private $cperday;///<mouse clicks per day(string formatted)
+	private $minutes;///<user account age in minutes(string formatted)
+    private $hours;///<user account age in hours(string formatted)
+    private $days;///<user account age in days (string formatted)
 
-    private $_retrievable = array('id','totalclicks','totalkeys','kperminute','cperminute','kperhour','cperhour','kperday','cperday','hours','days');///<variables retrievable using magic functions
+    private $_retrievable = array('id','totalclicks','totalkeys','kperminute','cperminute','kperhour','cperhour','kperday','cperday','minutes','hours','days');///<variables retrievable using magic functions
     private $built;///<whether or not the class has been built
 
-
-    function __construct($id) {
+/**
+@param $id the WhatPulse ID of the user
+@brief constructs the object using the passed ID, simultaneously retrieving the necessary data
+*/
+ public   function __construct($id) {
         $this->id = $id;
         $this->getXML();
+		        $this->perform();
 
     }
-    function __get($name) {
+	/**
+	@brief magic function to retrieve data with $myWhatPulse->totalclicks;
+	*/
+    public function __get($name) {
         if(!in_array($name,$this->_retrievable))
             throw new Exception('Variable '.$name.' does not exist in class WhatPulse.');
         return $this->$name;
     }
-    function get() {
+	/**
+	@brief formats the raw data into a readable string, also performs calculations
+	*/
+private    function perform() {
 //time calculation
         $totaltime = time()-strtotime($this->xml->DateJoined);
         $minutes = $totaltime/60;
@@ -52,10 +69,14 @@ class WhatPulse {
         $this->cperhour = number_format($cperhour,2);
         $this->kperday = number_format($kperday,2);
         $this->cperday = number_format($cperday,2);
+		$this->minutes = number_format($minutes,2);
         $this->hours = number_format($hours,2);
         $this->days = number_format($days,2);
     }
-    function getXML() {
+	/**
+	@brief grabs the data from the WhatPulse API, setting the object's SimpleXMLElement
+	*/
+private    function getXML() {
         $url = 'http://whatpulse.org/api/user.php?UserID=';
 
         $f = fopen($url.$this->id,'r');
@@ -65,8 +86,10 @@ class WhatPulse {
         $content = stream_get_contents($f);
         $this->xml = new SimpleXMLElement($content);
     }
+	/**
+	@brief useful for debugging, prints out all class data
+	*/
     function printStats() {
-        $this->get();
         echo 'Account Name: '.$this->xml->AccountName.' (id ' .$this->xml->UserID.' ranked '.$this->xml->Rank.")\n";
         echo $this->xml->Pulses.' pulses (last pulsed '.$this->xml->LastPulse.")\n";
         echo 'Key presses: '.$this->totalkeys."\n";
