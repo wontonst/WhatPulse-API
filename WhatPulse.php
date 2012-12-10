@@ -106,7 +106,7 @@ class WhatPulse {
         echo $this->xml->Pulses.' pulses (last pulsed '.number_format($this->lastpulseago/3600,2).' hours ago '.date('n/j/y @ g:iA',$this->lastpulse).")\n";
         echo 'Key presses: '.$this->totalkeys."\n";
         echo "\t".$this->kperminute.'/minute'."\n\t".$this->kperhour.'/hour'."\n\t".$this->kperday.'/day'."\n";
-        echo 'Mouse click: '.$this->totalclicks."\n";
+        echo 'Mouse clicks: '.$this->totalclicks."\n";
         echo "\t".$this->cperminute.'/minute'."\n\t".$this->cperhour.'/hour'."\n\t".$this->cperday.'/day'."\n";
         echo 'Total miles: '.$this->xml->TotalMiles."\n";
         echo 'Date joined: '.$this->xml->DateJoined.' ('.$this->days.' days)'."\n";
