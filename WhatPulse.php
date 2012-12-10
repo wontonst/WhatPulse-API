@@ -6,6 +6,7 @@ An alternative to whatever the WhatPulse website script offers. To be honest thi
 @version 0.1
 */
 class WhatPulse {
+
     private $id;//whatpulse id
     private $xml;//xml obtained from whatpulse
     private $totalclicks;///<total keyboard actions
@@ -19,7 +20,8 @@ class WhatPulse {
 	private $minutes;///<user account age in minutes(string formatted)
     private $hours;///<user account age in hours(string formatted)
     private $days;///<user account age in days (string formatted)
-
+private $lastpulse;///<unix timestamp of last pulse
+private $lastpulseago;///<seconds between now and last pulse
     private $_retrievable = array('id','totalclicks','totalkeys','kperminute','cperminute','kperhour','cperhour','kperday','cperday','minutes','hours','days');///<variables retrievable using magic functions
     private $built;///<whether or not the class has been built
 
@@ -28,7 +30,7 @@ class WhatPulse {
 @brief constructs the object using the passed ID, simultaneously retrieving the necessary data
 */
  public   function __construct($id) {
-        $this->id = $id;
+$this->id = $id;
         $this->getXML();
 		        $this->perform();
 
@@ -72,6 +74,16 @@ private    function perform() {
 		$this->minutes = number_format($minutes,2);
         $this->hours = number_format($hours,2);
         $this->days = number_format($days,2);
+
+$temp = date_default_timezone_get();//temporarily store current timezone
+date_default_timezone_set('Europe/Belgrade');//belgrade is where server located
+$datetime = new DateTime($this->xml->LastPulse);//create new DT from belgrade time
+$datetime->setTimezone(new DateTimeZone($temp));//convert belgrade time to current time
+date_default_timezone_set($temp);//reset timezone back to default
+$this->lastpulse = $datetime->getTimestamp();//set lastpulse unix timestamp
+$this->lastpulseago = time()-$this->lastpulse;//get time diff between now and lastpulse
+
+//echo $datetime->format('Y-m-d H:i:s').'::::'.$this->xml->LastPulse;
     }
 	/**
 	@brief grabs the data from the WhatPulse API, setting the object's SimpleXMLElement
@@ -91,7 +103,7 @@ private    function getXML() {
 	*/
     function printStats() {
         echo 'Account Name: '.$this->xml->AccountName.' (id ' .$this->xml->UserID.' ranked '.$this->xml->Rank.")\n";
-        echo $this->xml->Pulses.' pulses (last pulsed '.$this->xml->LastPulse.")\n";
+        echo $this->xml->Pulses.' pulses (last pulsed '.number_format($this->lastpulseago/3600,2).' hours ago '.date('n/j/y @ g:iA',$this->lastpulse).")\n";
         echo 'Key presses: '.$this->totalkeys."\n";
         echo "\t".$this->kperminute.'/minute'."\n\t".$this->kperhour.'/hour'."\n\t".$this->kperday.'/day'."\n";
         echo 'Mouse click: '.$this->totalclicks."\n";
