@@ -17,36 +17,36 @@ class WhatPulse {
     private $cperhour;///<mouse clicks per hour(string formatted)
     private $kperday;///<keyboard actions per day(string formatted)
     private $cperday;///<mouse clicks per day(string formatted)
-	private $minutes;///<user account age in minutes(string formatted)
+    private $minutes;///<user account age in minutes(string formatted)
     private $hours;///<user account age in hours(string formatted)
     private $days;///<user account age in days (string formatted)
-private $lastpulse;///<unix timestamp of last pulse
-private $lastpulseago;///<seconds between now and last pulse
+    private $lastpulse;///<unix timestamp of last pulse
+    private $lastpulseago;///<seconds between now and last pulse
     private $_retrievable = array('id','totalclicks','totalkeys','kperminute','cperminute','kperhour','cperhour','kperday','cperday','minutes','hours','days');///<variables retrievable using magic functions
     private $built;///<whether or not the class has been built
 
-/**
-@param $id the WhatPulse ID of the user
-@brief constructs the object using the passed ID, simultaneously retrieving the necessary data
-*/
- public   function __construct($id) {
-$this->id = $id;
+    /**
+    @param $id the WhatPulse ID of the user
+    @brief constructs the object using the passed ID, simultaneously retrieving the necessary data
+    */
+    public   function __construct($id) {
+        $this->id = $id;
         $this->getXML();
-		        $this->perform();
+        $this->perform();
 
     }
-	/**
-	@brief magic function to retrieve data with $myWhatPulse->totalclicks;
-	*/
+    /**
+    @brief magic function to retrieve data with $myWhatPulse->totalclicks;
+    */
     public function __get($name) {
         if(!in_array($name,$this->_retrievable))
             throw new Exception('Variable '.$name.' does not exist in class WhatPulse.');
         return $this->$name;
     }
-	/**
-	@brief formats the raw data into a readable string, also performs calculations
-	*/
-private    function perform() {
+    /**
+    @brief formats the raw data into a readable string, also performs calculations
+    */
+    private    function perform() {
 //time calculation
         $totaltime = time()-strtotime($this->xml->DateJoined);
         $minutes = $totaltime/60;
@@ -71,24 +71,24 @@ private    function perform() {
         $this->cperhour = number_format($cperhour,2);
         $this->kperday = number_format($kperday,2);
         $this->cperday = number_format($cperday,2);
-		$this->minutes = number_format($minutes,2);
+        $this->minutes = number_format($minutes,2);
         $this->hours = number_format($hours,2);
         $this->days = number_format($days,2);
 
-$temp = date_default_timezone_get();//temporarily store current timezone
-date_default_timezone_set('Europe/Belgrade');//belgrade is where server located
-$datetime = new DateTime($this->xml->LastPulse);//create new DT from belgrade time
-$datetime->setTimezone(new DateTimeZone($temp));//convert belgrade time to current time
-date_default_timezone_set($temp);//reset timezone back to default
-$this->lastpulse = $datetime->getTimestamp();//set lastpulse unix timestamp
-$this->lastpulseago = time()-$this->lastpulse;//get time diff between now and lastpulse
+        $temp = date_default_timezone_get();//temporarily store current timezone
+        date_default_timezone_set('Europe/Belgrade');//belgrade is where server located
+        $datetime = new DateTime($this->xml->LastPulse);//create new DT from belgrade time
+        $datetime->setTimezone(new DateTimeZone($temp));//convert belgrade time to current time
+        date_default_timezone_set($temp);//reset timezone back to default
+        $this->lastpulse = $datetime->getTimestamp();//set lastpulse unix timestamp
+        $this->lastpulseago = time()-$this->lastpulse;//get time diff between now and lastpulse
 
 //echo $datetime->format('Y-m-d H:i:s').'::::'.$this->xml->LastPulse;
     }
-	/**
-	@brief grabs the data from the WhatPulse API, setting the object's SimpleXMLElement
-	*/
-private    function getXML() {
+    /**
+    @brief grabs the data from the WhatPulse API, setting the object's SimpleXMLElement
+    */
+    private    function getXML() {
         $url = 'http://whatpulse.org/api/user.php?UserID=';
 
         $f = fopen($url.$this->id,'r');
@@ -98,9 +98,9 @@ private    function getXML() {
         $content = stream_get_contents($f);
         $this->xml = new SimpleXMLElement($content);
     }
-	/**
-	@brief useful for debugging, prints out all class data
-	*/
+    /**
+    @brief useful for debugging, prints out all class data
+    */
     function printStats() {
         echo 'Account Name: '.$this->xml->AccountName.' (id ' .$this->xml->UserID.' ranked '.$this->xml->Rank.")\n";
         echo $this->xml->Pulses.' pulses (last pulsed '.number_format($this->lastpulseago/3600,2).' hours ago '.date('n/j/y @ g:iA',$this->lastpulse).")\n";
