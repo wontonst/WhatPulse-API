@@ -79,9 +79,12 @@ class WhatPulse {
         date_default_timezone_set('Europe/Belgrade');//belgrade is where server located
         $datetime = new DateTime($this->xml->LastPulse);//create new DT from belgrade time
         $datetime->setTimezone(new DateTimeZone($temp));//convert belgrade time to current time
+
         date_default_timezone_set($temp);//reset timezone back to default
+
         $this->lastpulse = $datetime->getTimestamp();//set lastpulse unix timestamp
         $this->lastpulseago = time()-$this->lastpulse;//get time diff between now and lastpulse
+
 
 //echo $datetime->format('Y-m-d H:i:s').'::::'.$this->xml->LastPulse;
     }
