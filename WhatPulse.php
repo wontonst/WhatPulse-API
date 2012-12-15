@@ -41,7 +41,11 @@ class WhatPulse {
 switch($name)
 {
 case 'name':
-return $this->xml->AccountName;
+return ''.$this->xml->AccountName;
+case 'rank':
+return ''.$this->xml->Rank;
+case 'id':
+return ''.$this->xml->UserID;
 }
         if(!in_array($name,$this->_retrievable))
             throw new Exception('Variable '.$name.' does not exist in class WhatPulse.');
