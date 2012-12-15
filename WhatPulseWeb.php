@@ -31,13 +31,13 @@ STYLE;
 private $id;///<id of the user
 private $wp;///<WhatPulse object
 public function __construct($id) {
-if($id instanceof SimpleXMLElement)
+if($id instanceof WhatPulse)
 {
 $this->wp = $id;
 $this->id = $this->wp->id;
 }else{
     if(!is_numeric($id)) {
-        throw new Exception('Failed to create WhatPulseWeb with invalid ID '.$id);
+        throw new Exception('Failed to create WhatPulseWeb with invalid ID.');
     }
     $this->id = $id;
     $this->wp = new WhatPulse($id);
@@ -53,13 +53,19 @@ $out = <<<DOC
 $this->style
 </HEAD>
 <BODY>
-<div id=
+<div id="title">
+<h1>{$this->wp->name}</h1>
+Ranked {$this->wp->rank}<br />
+{$this->wp->pulses} pulses made<br />
+</div>
+<div id="main">
+
+</div>
 </BODY>
 </HTML>
 
 DOC;
 /*
-        echo 'Account Name: '.$this->xml->AccountName.' (id ' .$this->xml->UserID.' ranked '.$this->xml->Rank.")\n";
         echo $this->xml->Pulses.' pulses (last pulsed '.number_format($this->lastpulseago/3600,2).' hours ago '.date('n/j/y @ g:iA',$this->lastpulse).")\n";
         echo 'Key presses: '.$this->totalkeys."\n";
         echo "\t".$this->kperminute.'/minute'."\n\t".$this->kperhour.'/hour'."\n\t".$this->kperday.'/day'."\n";
