@@ -33,12 +33,16 @@ class WhatPulse {
         $this->id = $id;
         $this->getXML();
         $this->perform();
-
     }
     /**
     @brief magic function to retrieve data with $myWhatPulse->totalclicks;
     */
     public function __get($name) {
+switch($name)
+{
+case 'name':
+return $this->xml->AccountName;
+}
         if(!in_array($name,$this->_retrievable))
             throw new Exception('Variable '.$name.' does not exist in class WhatPulse.');
         return $this->$name;
