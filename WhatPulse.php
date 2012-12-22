@@ -62,12 +62,12 @@ class WhatPulse {
         $hours = $minutes/60;
         $days = $hours/24;
 //keypress calculation
-        $totalkeys = $this->xml->TotalKeyCount+0.0;
+        $totalkeys = $this->xml->Keys+0.0;
         $kperminute = $totalkeys/$minutes;
         $kperhour = $totalkeys/$hours;
         $kperday = $totalkeys/$days;
 //click calculation
-        $totalclicks = $this->xml->TotalMouseClicks+0.0;
+        $totalclicks = $this->xml->Clicks+0.0;
         $cperminute = $totalclicks/$minutes;
         $cperhour = $totalclicks/$hours;
         $cperday = $totalclicks/$days;
@@ -101,13 +101,14 @@ class WhatPulse {
     @brief grabs the data from the WhatPulse API, setting the object's SimpleXMLElement
     */
     private    function getXML() {
-        $url = 'http://whatpulse.org/api/user.php?UserID=';
+        $url = 'http://whatpulse.org/api/user.php?format=xml&user=';
 
         $f = fopen($url.$this->id,'r');
         if($f === false) {
             throw new Exception('Could not open '.$url.$this->id.'. Please check your internet connection');
         }
         $content = stream_get_contents($f);
+//echo $content;
         $this->xml = new SimpleXMLElement($content);
     }
     /**
