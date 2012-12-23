@@ -143,6 +143,7 @@ class WhatPulse {
         echo "\t\t".$this->upload->perminute.'/minute'."\n";
         echo "\t\t".$this->upload->perhour.'/hour'."\n";
         echo "\t\t".$this->upload->perday.'/day'."\n";
+echo 'Total uptime: '.$this->uptime." hours\n";
         echo 'Date joined: '.$this->xml->DateJoined.' ('.$this->days.' days)'."\n";
 
     }
