@@ -7,7 +7,7 @@ $stats->printStats();
 
 //$stats = new WhatPulse(1321);//invalid ID
 
-$web = new WhatPulseWeb($stats);
-echo $web->make();
+//$web = new WhatPulseWeb($stats);
+//echo $web->make();
 
 ?>
