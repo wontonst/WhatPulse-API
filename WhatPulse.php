@@ -15,11 +15,11 @@ class Stat {
         $this->data['perday'] = $this->total/($time/86400);
     }
     private function format(&$precision) {
-$zero = number_format($this->data['total'],0);
+        $zero = number_format($this->data['total'],0);
         array_walk($this->data,function(&$value,$key) use ($precision) {
             $value = number_format($value,$precision);
         });
-$this->data['total'] = $zero;
+        $this->data['total'] = $zero;
     }
 }
 /**
@@ -32,8 +32,8 @@ class WhatPulse {
 
     private $id;//whatpulse id
     private $xml;//xml obtained from whatpulse
-private $clicks;///<Stat object with information on clicks
-private $keys;///<Stat object with information on keys
+    private $clicks;///<Stat object with information on clicks
+    private $keys;///<Stat object with information on keys
     private $minutes;///<user account age in minutes(string formatted)
     private $hours;///<user account age in hours(string formatted)
     private $days;///<user account age in days (string formatted)
@@ -87,8 +87,8 @@ private $keys;///<Stat object with information on keys
         $this->hours = number_format($hours,2);
         $this->days = number_format($days,2);
 
-$this->clicks = new Stat($this->xml->Clicks+0.0,$totaltime);
-$this->keys = new Stat($this->xml->Keys+0.0,$totaltime);
+        $this->clicks = new Stat($this->xml->Clicks+0.0,$totaltime);
+        $this->keys = new Stat($this->xml->Keys+0.0,$totaltime);
 //lastpulse
         $temp = date_default_timezone_get();//temporarily store current timezone
         date_default_timezone_set('Europe/Belgrade');//belgrade is where server located
@@ -140,9 +140,9 @@ $this->keys = new Stat($this->xml->Keys+0.0,$totaltime);
         echo "\t\t".$this->download->perhour.'/hour'."\n";
         echo "\t\t".$this->download->perday.'/day'."\n";
         echo "\t".$this->upload->total.' MBytes uploaded'."\n";
-echo "\t\t".$this->upload->perminute.'/minute'."\n";
-echo "\t\t".$this->upload->perhour.'/hour'."\n";
-echo "\t\t".$this->upload->perday.'/day'."\n";
+        echo "\t\t".$this->upload->perminute.'/minute'."\n";
+        echo "\t\t".$this->upload->perhour.'/hour'."\n";
+        echo "\t\t".$this->upload->perday.'/day'."\n";
         echo 'Date joined: '.$this->xml->DateJoined.' ('.$this->days.' days)'."\n";
 
     }
