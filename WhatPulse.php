@@ -15,9 +15,11 @@ class Stat {
         $this->data['perday'] = $this->total/($time/86400);
     }
     private function format(&$precision) {
+$zero = number_format($this->data['total'],0);
         array_walk($this->data,function(&$value,$key) use ($precision) {
             $value = number_format($value,$precision);
         });
+$this->data['total'] = $zero;
     }
 }
 /**
@@ -30,14 +32,8 @@ class WhatPulse {
 
     private $id;//whatpulse id
     private $xml;//xml obtained from whatpulse
-    private $totalclicks;///<total keyboard actions
-    private $totalkeys;///<total mouse clicks
-    private $kperminute;///<keyboard actions per minute(string formatted)
-    private $cperminute;///<mouse clicks per minute(string formatted)
-    private $kperhour;///<keyboard actions per hour(string formatted)
-    private $cperhour;///<mouse clicks per hour(string formatted)
-    private $kperday;///<keyboard actions per day(string formatted)
-    private $cperday;///<mouse clicks per day(string formatted)
+private $clicks;///<Stat object with information on clicks
+private $keys;///<Stat object with information on keys
     private $minutes;///<user account age in minutes(string formatted)
     private $hours;///<user account age in hours(string formatted)
     private $days;///<user account age in days (string formatted)
@@ -48,7 +44,7 @@ class WhatPulse {
     private $uptime;///<user total uptime in hours(string formatted)
     private $lastpulse;///<unix timestamp of last pulse
     private $lastpulseago;///<seconds between now and last pulse
-    private $_retrievable = array('id','totalclicks','totalkeys','kperminute','cperminute','kperhour','cperhour','kperday','cperday','minutes','hours','days');///<variables retrievable using magic functions
+    private $_retrievable = array('id','totalclicks','totalkeys','minutes','hours','days');///<variables retrievable using magic functions
     private $built;///<whether or not the class has been built
 
     /**
@@ -87,29 +83,12 @@ class WhatPulse {
         $minutes = $totaltime/60;
         $hours = $minutes/60;
         $days = $hours/24;
-//keypress calculation
-        $totalkeys = $this->xml->Keys+0.0;
-        $kperminute = $totalkeys/$minutes;
-        $kperhour = $totalkeys/$hours;
-        $kperday = $totalkeys/$days;
-//click calculation
-        $totalclicks = $this->xml->Clicks+0.0;
-        $cperminute = $totalclicks/$minutes;
-        $cperhour = $totalclicks/$hours;
-        $cperday = $totalclicks/$days;
-//click/keypress formatting
-        $this->totalclicks = number_format($totalclicks,0);
-        $this->totalkeys = number_format($totalkeys,0);
-        $this->kperminute = number_format($kperminute,2);
-        $this->cperminute = number_format($cperminute,2);
-        $this->kperhour = number_format($kperhour,2);
-        $this->cperhour = number_format($cperhour,2);
-        $this->kperday = number_format($kperday,2);
-        $this->cperday = number_format($cperday,2);
         $this->minutes = number_format($minutes,2);
         $this->hours = number_format($hours,2);
         $this->days = number_format($days,2);
 
+$this->clicks = new Stat($this->xml->Clicks+0.0,$totaltime);
+$this->keys = new Stat($this->xml->Keys+0.0,$totaltime);
 //lastpulse
         $temp = date_default_timezone_get();//temporarily store current timezone
         date_default_timezone_set('Europe/Belgrade');//belgrade is where server located
@@ -121,7 +100,7 @@ class WhatPulse {
         $this->lastpulse = $datetime->getTimestamp();//set lastpulse unix timestamp
         $this->lastpulseago = time()-$this->lastpulse;//get time diff between now and lastpulse
 //echo $datetime->format('Y-m-d H:i:s').'::::'.$this->xml->LastPulse;
-
+//-----------------------------------------------------------------------------
 //network
         $this->network = number_format($this->xml->DownloadMB+$this->xml->UploadMB,2);
         $this->networkratio = number_format($this->xml->DownloadMB/$this->xml->UploadMB/8,2);
@@ -151,16 +130,19 @@ class WhatPulse {
     function printStats() {
         echo 'Account Name: '.$this->xml->AccountName.' (id ' .$this->xml->UserID.' ranked '.$this->xml->Rank.")\n";
         echo $this->xml->Pulses.' pulses (last pulsed '.number_format($this->lastpulseago/3600,2).' hours ago '.date('n/j/y @ g:iA',$this->lastpulse).")\n";
-        echo 'Key presses: '.$this->totalkeys."\n";
-        echo "\t".$this->kperminute.'/minute'."\n\t".$this->kperhour.'/hour'."\n\t".$this->kperday.'/day'."\n";
-        echo 'Mouse clicks: '.$this->totalclicks."\n";
-        echo "\t".$this->cperminute.'/minute'."\n\t".$this->cperhour.'/hour'."\n\t".$this->cperday.'/day'."\n";
+        echo 'Key presses: '.$this->keys->total."\n";
+        echo "\t".$this->keys->perminute.'/minute'."\n\t".$this->keys->perhour.'/hour'."\n\t".$this->keys->perday.'/day'."\n";
+        echo 'Mouse clicks: '.$this->clicks->total."\n";
+        echo "\t".$this->clicks->perminute.'/minute'."\n\t".$this->clicks->perhour.'/hour'."\n\t".$this->clicks->perday.'/day'."\n";
         echo 'Total network operations: '.$this->network.' MBytes ('.$this->networkratio.' D/U ratio'.")\n";
         echo "\t".$this->download->total.' MBytes downloaded'."\n";
         echo "\t\t".$this->download->perminute.'/minute'."\n";
         echo "\t\t".$this->download->perhour.'/hour'."\n";
         echo "\t\t".$this->download->perday.'/day'."\n";
         echo "\t".$this->upload->total.' MBytes uploaded'."\n";
+echo "\t\t".$this->upload->perminute.'/minute'."\n";
+echo "\t\t".$this->upload->perhour.'/hour'."\n";
+echo "\t\t".$this->upload->perday.'/day'."\n";
         echo 'Date joined: '.$this->xml->DateJoined.' ('.$this->days.' days)'."\n";
 
     }
