@@ -39,8 +39,8 @@ class WhatPulse {
     private $days;///<user account age in days (string formatted)
     private $network;///<user total network operations in megabytes (string formatted)
     private $networkratio;///<download:upload ratio
-    private $download;///<user download in megabytes (string formatted)
-    private $upload;///<user upload in megabytes (string formatted)
+    private $download;///<Stats object of user download in megabytes (string formatted)
+    private $upload;///<Stats object of user upload in megabytes (string formatted)
     private $uptime;///<user total uptime in hours(string formatted)
     private $lastpulse;///<unix timestamp of last pulse
     private $lastpulseago;///<seconds between now and last pulse
