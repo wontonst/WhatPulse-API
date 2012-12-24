@@ -10,6 +10,7 @@ class Stat {
         return $this->data[$v];
     }
     private function calculate(&$time) {
+$this->data['persecond'] = $this->total/$time;
         $this->data['perminute'] = $this->total/($time/60);
         $this->data['perhour'] = $this->total/($time/3600);
         $this->data['perday'] = $this->total/($time/86400);
@@ -102,10 +103,14 @@ class WhatPulse {
 //echo $datetime->format('Y-m-d H:i:s').'::::'.$this->xml->LastPulse;
 //-----------------------------------------------------------------------------
 //network
+$inception = 1356156000;///<time of client 2.0/bandwidth stats release
+$inception = time()-$inception;
         $this->network = number_format($this->xml->DownloadMB+$this->xml->UploadMB,2);
         $this->networkratio = number_format($this->xml->DownloadMB/$this->xml->UploadMB,2);
-        $this->download = new Stat($this->xml->DownloadMB+0.0,$totaltime);
-        $this->upload = new Stat($this->xml->UploadMB+0.0,$totaltime);
+if($inception > $totaltime)
+$inception = $totaltime;
+        $this->download = new Stat($this->xml->DownloadMB+0.0,$inception);
+        $this->upload = new Stat($this->xml->UploadMB+0.0,$inception);
 
         $this->uptime = number_format($this->xml->UptimeSeconds/3600,2);
     }
