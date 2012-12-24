@@ -103,7 +103,7 @@ class WhatPulse {
 //-----------------------------------------------------------------------------
 //network
         $this->network = number_format($this->xml->DownloadMB+$this->xml->UploadMB,2);
-        $this->networkratio = number_format($this->xml->DownloadMB/$this->xml->UploadMB/8,2);
+        $this->networkratio = number_format($this->xml->DownloadMB/$this->xml->UploadMB,2);
         $this->download = new Stat($this->xml->DownloadMB+0.0,$totaltime);
         $this->upload = new Stat($this->xml->UploadMB+0.0,$totaltime);
 
