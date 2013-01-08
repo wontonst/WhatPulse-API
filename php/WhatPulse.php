@@ -133,18 +133,18 @@ $inception = $totaltime;
     @brief useful for debugging, prints out all class data
     */
     function printStats() {
-        echo 'Account Name: '.$this->xml->AccountName.' (id ' .$this->xml->UserID.' ranked '.$this->xml->Rank.")\n";
+        echo 'Account Name: '.$this->xml->AccountName.' (id ' .$this->xml->UserID.")\n";
         echo $this->xml->Pulses.' pulses (last pulsed '.number_format($this->lastpulseago/3600,2).' hours ago '.date('n/j/y @ g:iA',$this->lastpulse).")\n";
-        echo 'Key presses: '.$this->keys->total."\n";
+        echo 'Key presses: '.$this->keys->total.' (ranked '.$this->xml->Ranks->Keys.")\n";
         echo "\t".$this->keys->perminute.'/minute'."\n\t".$this->keys->perhour.'/hour'."\n\t".$this->keys->perday.'/day'."\n";
-        echo 'Mouse clicks: '.$this->clicks->total."\n";
+        echo 'Mouse clicks: '.$this->clicks->total.' (ranked '.$this->xml->Ranks->Keys.")\n";
         echo "\t".$this->clicks->perminute.'/minute'."\n\t".$this->clicks->perhour.'/hour'."\n\t".$this->clicks->perday.'/day'."\n";
         echo 'Total network operations: '.$this->network.' MBytes ('.$this->networkratio.' D/U ratio'.")\n";
-        echo "\t".$this->download->total.' MBytes downloaded'."\n";
+        echo "\t".$this->download->total.' MBytes downloaded (ranked '.$this->xml->Ranks->Download.")\n";
         echo "\t\t".$this->download->perminute.'/minute'."\n";
         echo "\t\t".$this->download->perhour.'/hour'."\n";
         echo "\t\t".$this->download->perday.'/day'."\n";
-        echo "\t".$this->upload->total.' MBytes uploaded'."\n";
+        echo "\t".$this->upload->total.' MBytes uploaded (ranked '.$this->xml->Ranks->Upload.")\n";
         echo "\t\t".$this->upload->perminute.'/minute'."\n";
         echo "\t\t".$this->upload->perhour.'/hour'."\n";
         echo "\t\t".$this->upload->perday.'/day'."\n";
