@@ -137,7 +137,7 @@ $inception = $totaltime;
         echo $this->xml->Pulses.' pulses (last pulsed '.number_format($this->lastpulseago/3600,2).' hours ago '.date('n/j/y @ g:iA',$this->lastpulse).")\n";
         echo 'Key presses: '.$this->keys->total.' (ranked '.$this->xml->Ranks->Keys.")\n";
         echo "\t".$this->keys->perminute.'/minute'."\n\t".$this->keys->perhour.'/hour'."\n\t".$this->keys->perday.'/day'."\n";
-        echo 'Mouse clicks: '.$this->clicks->total.' (ranked '.$this->xml->Ranks->Keys.")\n";
+        echo 'Mouse clicks: '.$this->clicks->total.' (ranked '.$this->xml->Ranks->Clicks.")\n";
         echo "\t".$this->clicks->perminute.'/minute'."\n\t".$this->clicks->perhour.'/hour'."\n\t".$this->clicks->perday.'/day'."\n";
         echo 'Total network operations: '.$this->network.' MBytes ('.$this->networkratio.' D/U ratio'.")\n";
         echo "\t".$this->download->total.' MBytes downloaded (ranked '.$this->xml->Ranks->Download.")\n";
