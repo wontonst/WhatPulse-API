@@ -15,6 +15,11 @@ import org.w3c.dom.NodeList;
 
 import org.xml.sax.SAXException;
 
+/**
+ * Retrieves information from api.whatpulse.org.
+ * Note that this class was developed for the WhatStats Android application. Some unnecessary features may be included.
+ * 
+ */
 public class WhatPulse {
 	public static boolean debug = true;
 
