@@ -1,3 +1,3 @@
 WhatPulse-API
 =============
-a PHP/java implementation of the WhatPulse API, uses simple HTTP requests
+PHP/java implementations of the WhatPulse API, uses simple HTTP requests
